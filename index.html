@@ -3,152 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banana Defender</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            user-select: none;
-        }
-        body {
-            margin: 0;
-            padding: 0;
-            background: #111;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-        #game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(circle, #222 0%, #050505 100%);
-        }
-        /* Top UI Bar */
-        #ui-top {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.7);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            z-index: 10;
-        }
-        .stat-box {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .yellow { color: #ffd700; }
-        .red { color: #ff4d4d; }
-        .green { color: #4dff4d; }
-        .cyan { color: #4da6ff; }
-
-        /* Game Canvas */
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Control Panels */
-        #control-panel {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background: rgba(0,0,0,0.85);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #444;
-            display: flex;
-            gap: 15px;
-            z-index: 10;
-        }
-        .panel-section {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .panel-section h3 {
-            margin: 0 0 5px 0;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #aaa;
-        }
-        button {
-            background: #333;
-            color: white;
-            border: 1px solid #555;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-        button:hover:not(:disabled) {
-            background: #555;
-            border-color: #ffd700;
-        }
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        
-        /* Skin Buttons Custom Styling */
-        .skin-default { border-left: 4px solid #ffd700; }
-        .skin-fire { border-left: 4px solid #ff4500; }
-        .skin-water { border-left: 4px solid #1e90ff; }
-        .skin-light { border-left: 4px solid #ffffff; }
-        .skin-supernova { border-left: 4px solid #9370db; }
-        
-        .active-skin {
-            background: #ffd700 !important;
-            color: black !important;
-        }
-
-        #wave-btn {
-            background: #28a745;
-            border-color: #218838;
-            font-size: 16px;
-        }
-        #wave-btn:hover {
-            background: #218838;
-        }
-
-        /* Instructions Overlay */
-        #instructions {
-            position: absolute;
-            top: 80px;
-            left: 10px;
-            background: rgba(0,0,0,0.6);
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 13px;
-            pointer-events: none;
-            line-height: 1.4;
-            color: #ccc;
-        }
-    </style>
+    <title>Banana Defender - Liam Edition</title>
+    <!-- Linking external CSS stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="game-container">
     <div id="ui-top">
-        <div class="stat-box">WAVE: <span id="wave-val" class="yellow">1</span> / 100,000</div>
+        <div class="stat-box">WAVE: <span id="wave-val" class="yellow">1</span></div>
         <div class="stat-box">WALL HP: <span id="hp-val" class="red">1000</span></div>
         <div class="stat-box">BANANA COINS: $<span id="cash-val" class="green">150</span></div>
         <div class="stat-box">CURRENT GUN: <span id="gun-val" class="cyan">Pistol</span></div>
     </div>
 
     <div id="instructions">
-        <strong>How to Play:</strong><br>
-        • Left Click on the battlefield to shoot bullets.<br>
-        • Buy Spikes or Mines and place them on the ground.<br>
-        • Enemies walk from right to left to destroy your wall.<br>
-        • Defend the wall at all costs!
+        <strong>Liam Operational Dashboard:</strong><br>
+        • Tap anywhere on the sky to blast massive projectiles.<br>
+        • Hitboxes are ultra-wide: Easily snipe flying targets!<br>
+        • Advance through the waves to unlock more powerful weapons!<br>
+        • Press <strong>'A'</strong> to toggle the Secret Admin Overlord Panel.
+    </div>
+
+    <div id="admin-panel">
+        <h2>★ LIAM OVERLORD PANEL ★</h2>
+        <div class="admin-row">
+            <span>10-GUN BARRAGE</span>
+            <button id="toggle-10gun" class="toggle-btn" onclick="toggle10Gun()">DISABLED</button>
+        </div>
+        <div class="admin-row">
+            <span>AUTO CLICKER (RAPID)</span>
+            <button id="toggle-autoclick" class="toggle-btn" onclick="toggleAutoClicker()">DISABLED</button>
+        </div>
+        <div class="admin-row">
+            <span>ADD RESOURCES</span>
+            <button class="toggle-btn" onclick="addAdminCash()">+$10,000</button>
+        </div>
     </div>
 
     <canvas id="gameCanvas"></canvas>
@@ -158,491 +48,29 @@
             <h3>Defenses</h3>
             <button id="btn-spike" onclick="selectTrap('spike')">Buy Spike Trap ($50)</button>
             <button id="btn-mine" onclick="selectTrap('mine')">Buy Mine ($100)</button>
-            <button id="btn-wall" onclick="upgradeWall()">Upgrade AoT Wall ($200)</button>
+            <button id="btn-wall" onclick="upgradeWall()">Upgrade Wall ($200)</button>
         </div>
         <div class="panel-section">
-            <h3>Wall Skin Shop</h3>
-            <button id="skin-default" class="skin-default active-skin" onclick="handleSkinClick('default')">Classic Banana (Owned)</button>
-            <button id="skin-fire" class="skin-fire" onclick="handleSkinClick('fire')">Buy Fire ($200)</button>
-            <button id="skin-water" class="skin-water" onclick="handleSkinClick('water')">Buy Water ($400)</button>
-            <button id="skin-light" class="skin-light" onclick="handleSkinClick('light')">Buy Light ($800)</button>
-            <button id="skin-supernova" class="skin-supernova" onclick="handleSkinClick('supernova')">Buy Supernova ($1500)</button>
+            <h3>Weapons Locker</h3>
+            <select id="weapon-select" onchange="changeWeapon(this.value)">
+                <option value="pistol">Pistol (Default)</option>
+                <option value="shotgun">Shotgun (Wave 3+)</option>
+                <option value="rocket">Rocket Launcher (Wave 5+)</option>
+            </select>
         </div>
-        <div class="panel-section" style="justify-content: flex-end;">
-            <button id="wave-btn" onclick="startWave()">START NEXT WAVE</button>
+        <div class="panel-section">
+            <h3>Aesthetics</h3>
+            <button id="skin-def" class="skin-default active-skin" onclick="changeSkin('default', this)">Gold Base</button>
+            <button id="skin-fire" class="skin-fire" onclick="changeSkin('fire', this)">Magma Flame</button>
+        </div>
+        <div class="panel-section" style="flex-grow: 1; min-width: 120px;">
+            <button id="wave-btn" onclick="startNextWave()">START NEXT WAVE</button>
         </div>
     </div>
 </div>
 
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-
-    // Resize canvas dynamically
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    // Game Variables
-    let game = {
-        wave: 1,
-        cash: 150,
-        wallHp: 1000,
-        wallMaxHp: 1000,
-        wallLevel: 1,
-        currentGun: 'Pistol',
-        selectedSkin: 'default',
-        selectedTrap: null,
-        waveActive: false
-    };
-
-    // Entities Arrays
-    let enemies = [];
-    let bullets = [];
-    let traps = [];
-    let particles = [];
-
-    // Weapon Tier Config
-    const WEAPONS = {
-        'Pistol': { damage: 25, speed: 7, cooldown: 400, color: '#fff' },
-        'Uzi': { damage: 15, speed: 12, cooldown: 120, color: '#ffea00' },
-        'AR': { damage: 40, speed: 15, cooldown: 200, color: '#00ffcc' },
-        'Minigun': { damage: 25, speed: 18, cooldown: 60, color: '#ff00ff' }
-    };
-    let lastShotTime = 0;
-
-    // Skin Configuration: Prices, Ownership status, and Display names
-    const SKINS = {
-        default: { primary: '#ffd700', secondary: '#b8860b', aura: 'rgba(255,215,0,0.2)', price: 0, owned: true, label: "Classic Banana" },
-        fire: { primary: '#ff4500', secondary: '#8b0000', aura: 'rgba(255,69,0,0.3)', price: 200, owned: false, label: "Fire Skin" },
-        water: { primary: '#1e90ff', secondary: '#00008b', aura: 'rgba(30,144,255,0.3)', price: 400, owned: false, label: "Water Skin" },
-        light: { primary: '#ffffff', secondary: '#aaaaaa', aura: 'rgba(255,255,255,0.4)', price: 800, owned: false, label: "Light Skin" },
-        supernova: { primary: '#9370db', secondary: '#4b0082', aura: 'rgba(147,112,219,0.4)', price: 1500, owned: false, label: "Supernova" }
-    };
-
-    // Base positioning (The AoT style Wall on the left side)
-    function getWallX() { return 180; }
-
-    // Update Top UI elements and Shop item states
-    function updateUI() {
-        document.getElementById('wave-val').innerText = game.wave.toLocaleString();
-        document.getElementById('hp-val').innerText = `${game.wallHp}/${game.wallMaxHp}`;
-        document.getElementById('cash-val').innerText = game.cash;
-        document.getElementById('gun-val').innerText = game.currentGun;
-        document.getElementById('wave-btn').disabled = game.waveActive;
-
-        // Dynamically update the visual labels inside the skin shop buttons
-        Object.keys(SKINS).forEach(skinKey => {
-            const btn = document.getElementById(`skin-${skinKey}`);
-            if (!btn) return;
-
-            if (SKINS[skinKey].owned) {
-                btn.innerText = skinKey === game.selectedSkin ? `${SKINS[skinKey].label} (Equipped)` : `${SKINS[skinKey].label} (Owned)`;
-            } else {
-                btn.innerText = `Buy ${SKINS[skinKey].label} ($${SKINS[skinKey].price})`;
-            }
-        });
-    }
-
-    // Gun Unlock Logic based on waves
-    function checkWeaponUnlocks() {
-        if (game.wave >= 50) {
-            game.currentGun = 'Minigun';
-        } else if (game.wave >= 25) {
-            game.currentGun = 'AR';
-        } else if (game.wave >= 10) {
-            game.currentGun = 'Uzi';
-        } else {
-            game.currentGun = 'Pistol';
-        }
-    }
-
-    // Process purchasing or equipping skins securely
-    function handleSkinClick(skinName) {
-        const targetSkin = SKINS[skinName];
-
-        if (targetSkin.owned) {
-            // Equip directly if already owned
-            setSkin(skinName);
-        } else {
-            // Attempt conversion buy validation
-            if (game.cash >= targetSkin.price) {
-                game.cash -= targetSkin.price;
-                targetSkin.owned = true;
-                createExplosion(getWallX(), canvas.height / 2, targetSkin.primary, 35);
-                setSkin(skinName);
-            } else {
-                alert(`Not enough Banana Coins! You need $${targetSkin.price} to unlock this skin.`);
-            }
-        }
-    }
-
-    // Set active skin selection
-    function setSkin(skinName) {
-        game.selectedSkin = skinName;
-        
-        // Update selection states across the UI lists cleanly
-        document.querySelectorAll('.panel-section button').forEach(b => b.classList.remove('active-skin'));
-        document.getElementById(`skin-${skinName}`).classList.add('active-skin');
-        updateUI();
-    }
-
-    // Set active trap item to deploy
-    function selectTrap(type) {
-        if (type === 'spike' && game.cash >= 50) {
-            game.selectedTrap = 'spike';
-        } else if (type === 'mine' && game.cash >= 100) {
-            game.selectedTrap = 'mine';
-        } else {
-            alert("Not enough Banana Coins!");
-        }
-    }
-
-    // Upgrade base walls and visual health
-    function upgradeWall() {
-        if (game.cash >= 200) {
-            game.cash -= 200;
-            game.wallLevel++;
-            game.wallMaxHp += 500;
-            game.wallHp = game.wallMaxHp; // Heal to full on upgrade
-            createExplosion(getWallX(), canvas.height/2, '#ffd700', 30);
-            updateUI();
-        } else {
-            alert("Not enough Banana Coins to upgrade the giant wall!");
-        }
-    }
-
-    // Input Actions: Clicking Canvas shoots bullets or places defenses
-    canvas.addEventListener('mousedown', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-
-        // Prevent placing items or shooting behind the defensive wall line
-        if (mouseX < getWallX()) return;
-
-        // If a trap is actively chosen, place it down instead of shooting
-        if (game.selectedTrap) {
-            if (game.selectedTrap === 'spike' && game.cash >= 50) {
-                traps.push({ x: mouseX, y: mouseY, type: 'spike', health: 5, range: 30 });
-                game.cash -= 50;
-            } else if (game.selectedTrap === 'mine' && game.cash >= 100) {
-                traps.push({ x: mouseX, y: mouseY, type: 'mine', triggered: false });
-                game.cash -= 100;
-            }
-            game.selectedTrap = null; // Reset selection tool
-            updateUI();
-            return;
-        }
-
-        // Standard fire projectile weapon mechanic
-        fireBullet(mouseX, mouseY);
-    });
-
-    function fireBullet(targetX, targetY) {
-        const now = Date.now();
-        const weapon = WEAPONS[game.currentGun];
-        if (now - lastShotTime < weapon.cooldown) return;
-
-        lastShotTime = now;
-        const startX = getWallX() + 20;
-        const startY = canvas.height / 2; // Shooting from high midpoint tower area
-
-        const angle = Math.atan2(targetY - startY, targetX - startX);
-        bullets.push({
-            x: startX,
-            y: startY,
-            vx: Math.cos(angle) * weapon.speed,
-            vy: Math.sin(angle) * weapon.speed,
-            damage: weapon.damage,
-            color: weapon.color
-        });
-    }
-
-    // Trigger wave progression loop 
-    function startWave() {
-        if (game.waveActive) return;
-        game.waveActive = true;
-        updateUI();
-
-        // 100,000 Waves Scaling Calculation Formula (Increases health/count incrementally)
-        let enemyCount = 5 + Math.floor(game.wave * 1.5);
-        let baseHp = 30 + (game.wave * 12);
-        let baseSpeed = 1 + Math.min(game.wave * 0.05, 3);
-
-        let delay = 0;
-        for (let i = 0; i < enemyCount; i++) {
-            setTimeout(() => {
-                if (!game.waveActive) return;
-                enemies.push({
-                    x: canvas.width + 50,
-                    y: Math.random() * (canvas.height - 250) + 100,
-                    hp: baseHp,
-                    maxHp: baseHp,
-                    speed: baseSpeed + (Math.random() * 0.5),
-                    size: 20 + Math.min(baseHp * 0.05, 30)
-                });
-            }, delay);
-            delay += Math.max(800 - (game.wave * 10), 200); // Fast pacing spawns on deep levels
-        }
-    }
-
-    // Particle FX Generator
-    function createExplosion(x, y, color, count) {
-        for (let i = 0; i < count; i++) {
-            particles.push({
-                x: x, y: y,
-                vx: (Math.random() - 0.5) * 6,
-                vy: (Math.random() - 0.5) * 6,
-                alpha: 1,
-                color: color,
-                size: Math.random() * 4 + 2
-            });
-        }
-    }
-
-    // Core Frame Engine Processing
-    function updateGame() {
-        // 1. Move & Filter Bullets (Iterated backwards safely)
-        for (let i = bullets.length - 1; i >= 0; i--) {
-            let b = bullets[i];
-            b.x += b.vx;
-            b.y += b.vy;
-            if (b.x > canvas.width || b.y < 0 || b.y > canvas.height) {
-                bullets.splice(i, 1);
-            }
-        }
-
-        // 2. Move & Process Bad Monkey Enemies (Iterated backwards safely)
-        for (let i = enemies.length - 1; i >= 0; i--) {
-            let e = enemies[i];
-            let removedEnemy = false;
-
-            // Collision interaction checks with base spikes/mines (Iterated backwards safely)
-            for (let j = traps.length - 1; j >= 0; j--) {
-                let t = traps[j];
-                if (t.type === 'spike') {
-                    let dist = Math.hypot(e.x - t.x, e.y - t.y);
-                    if (dist < e.size + t.range) {
-                        e.hp -= 0.5; // Steady tick damage over time
-                        t.health -= 0.01;
-                        if (t.health <= 0) {
-                            traps.splice(j, 1);
-                        }
-                    }
-                } else if (t.type === 'mine' && !t.triggered) {
-                    let dist = Math.hypot(e.x - t.x, e.y - t.y);
-                    if (dist < e.size + 20) {
-                        t.triggered = true;
-                        e.hp -= 150; // High explosive impact hit
-                        createExplosion(t.x, t.y, '#ff4500', 25);
-                        traps.splice(j, 1);
-                    }
-                }
-            }
-
-            // Move left if not dead from traps
-            if (e.hp > 0) {
-                e.x -= e.speed;
-            } else {
-                // Enemy died to traps
-                let bounty = 10 + Math.floor(game.wave * 0.5);
-                game.cash += bounty;
-                createExplosion(e.x, e.y, '#ffea00', 12);
-                enemies.splice(i, 1);
-                updateUI();
-                continue;
-            }
-
-            // Target collision hit directly against our AoT Style Defense Wall
-            if (e.x - e.size <= getWallX()) {
-                game.wallHp -= Math.ceil(e.hp * 0.1); // Structural impact damage based on health size
-                createExplosion(e.x, e.y, '#ff0000', 8);
-                enemies.splice(i, 1);
-                
-                if (game.wallHp <= 0) {
-                    game.wallHp = 0;
-                    alert(`GAME OVER! You survived until Wave ${game.wave}.`);
-                    // Soft reset back to initial setup
-                    game.wave = 1;
-                    game.cash = 150;
-                    game.wallMaxHp = 1000;
-                    game.wallHp = 1000;
-                    game.wallLevel = 1;
-                    enemies = [];
-                    traps = [];
-                    bullets = [];
-                    // Reset custom skin ownership structure on wipeout except classic
-                    Object.keys(SKINS).forEach(k => { if(k !== 'default') SKINS[k].owned = false; });
-                    game.selectedSkin = 'default';
-                    checkWeaponUnlocks();
-                    game.waveActive = false;
-                }
-                updateUI();
-                continue;
-            }
-
-            // Bullet vs Enemy Intersections
-            for (let bIdx = bullets.length - 1; bIdx >= 0; bIdx--) {
-                let b = bullets[bIdx];
-                let dist = Math.hypot(e.x - b.x, e.y - b.y);
-                if (dist < e.size) {
-                    e.hp -= b.damage;
-                    createExplosion(b.x, b.y, b.color, 4);
-                    bullets.splice(bIdx, 1); // Remove bullet
-
-                    if (e.hp <= 0) {
-                        let bounty = 10 + Math.floor(game.wave * 0.5);
-                        game.cash += bounty;
-                        createExplosion(e.x, e.y, '#ffea00', 12);
-                        enemies.splice(i, 1); // Remove enemy
-                        removedEnemy = true;
-                        updateUI();
-                        break; // Stop analyzing bullets for this dead enemy
-                    }
-                }
-            }
-            if (removedEnemy) continue;
-        }
-
-        // Particles lifespan decay loop (Iterated backwards safely)
-        for (let i = particles.length - 1; i >= 0; i--) {
-            let p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
-            p.alpha -= 0.02;
-            if (p.alpha <= 0) {
-                particles.splice(i, 1);
-            }
-        }
-
-        // Monitor clean state to dynamically complete active level waves
-        if (game.waveActive && enemies.length === 0) {
-            game.waveActive = false;
-            game.wave++;
-            checkWeaponUnlocks();
-            updateUI();
-        }
-    }
-
-    // Graphical Render Loop Processing
-    function drawGame() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const skin = SKINS[game.selectedSkin];
-
-        // 1. Draw the Mighty AoT Defense Wall Base Platform Structure
-        ctx.fillStyle = skin.secondary;
-        ctx.fillRect(0, 0, getWallX(), canvas.height);
-        
-        // Front defensive layered pillar line structure 
-        ctx.fillStyle = skin.primary;
-        ctx.fillRect(getWallX() - 15, 0, 15, canvas.height);
-
-        // Render additional structural battle elements as wall tier upgrades increase
-        for (let i = 0; i < game.wallLevel; i++) {
-            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(getWallX() - 40 - (i*15), (canvas.height/2) - 100, 20, 200);
-        }
-
-        // Glowing Skin Magical Forcefield Aura FX
-        ctx.fillStyle = skin.aura;
-        ctx.fillRect(getWallX(), 0, 30, canvas.height);
-
-        // 2. Draw Deployed Defensive Traps
-        traps.forEach(t => {
-            if (t.type === 'spike') {
-                ctx.fillStyle = '#777';
-                ctx.beginPath();
-                ctx.moveTo(t.x - 15, t.y + 10);
-                ctx.lineTo(t.x, t.y - 20);
-                ctx.lineTo(t.x + 15, t.y + 10);
-                ctx.fill();
-                // Sharp Tip Accent
-                ctx.fillStyle = skin.primary;
-                ctx.beginPath();
-                ctx.moveTo(t.x - 6, t.y - 2);
-                ctx.lineTo(t.x, t.y - 20);
-                ctx.lineTo(t.x + 6, t.y - 2);
-                ctx.fill();
-            } else if (t.type === 'mine') {
-                ctx.fillStyle = '#cc0000';
-                ctx.beginPath();
-                ctx.arc(t.x, t.y, 10, 0, Math.PI * 2);
-                ctx.fill();
-                // Active core lens blinker
-                ctx.fillStyle = (Math.floor(Date.now() / 200) % 2 === 0) ? '#fff' : '#000';
-                ctx.beginPath();
-                ctx.arc(t.x, t.y, 4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        });
-
-        // 3. Draw Projectile Bullets
-        bullets.forEach(b => {
-            ctx.fillStyle = b.color;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = b.color;
-            ctx.beginPath();
-            ctx.arc(b.x, b.y, 4, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0; // Reset canvas filter bloom
-        });
-
-        // 4. Draw Bad Gorilla/Monkey Invaders
-        enemies.forEach(e => {
-            // Draw Main Outer Silhouette Body
-            ctx.fillStyle = '#5c4033';
-            ctx.beginPath();
-            ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Draw Inner Angry Face Details
-            ctx.fillStyle = '#daacc4';
-            ctx.beginPath();
-            ctx.arc(e.x - (e.size * 0.2), e.y, e.size * 0.6, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Glowing Angry Eyes Mask
-            ctx.fillStyle = '#ff0000';
-            ctx.fillRect(e.x - (e.size * 0.5), e.y - (e.size * 0.2), 6, 4);
-            ctx.fillRect(e.x - (e.size * 0.1), e.y - (e.size * 0.2), 6, 4);
-
-            // Miniature Health Bar Rendering System overhead
-            let barW = e.size * 1.5;
-            let barH = 5;
-            let barX = e.x - (barW / 2);
-            let barY = e.y - e.size - 12;
-            ctx.fillStyle = 'rgba(0,0,0,0.5)';
-            ctx.fillRect(barX, barY, barW, barH);
-            ctx.fillStyle = '#ff4d4d';
-            ctx.fillRect(barX, barY, barW * (e.hp / e.maxHp), barH);
-        });
-
-        // 5. Draw FX Particles
-        particles.forEach(p => {
-            ctx.fillStyle = p.color;
-            ctx.globalAlpha = p.alpha;
-            ctx.fillRect(p.x, p.y, p.size, p.size);
-        });
-        ctx.globalAlpha = 1.0; // Reset overall layer transparency blending
-    }
-
-    // Engine Core Game Loop Integration
-    function gameLoop() {
-        updateGame();
-        drawGame();
-        requestAnimationFrame(gameLoop);
-    }
-
-    // Initialize UI Layout metrics
-    updateUI();
-    // Kickstart Engine ticks
-    gameLoop();
-</script>
-
+<!-- Linking external JavaScript logic module -->
+<script src="script.js"></script>
 </body>
 </html>
+

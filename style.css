@@ -1,1 +1,203 @@
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background: #050b14;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    touch-action: none;
+}
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+/* Top UI Bar */
+#ui-top {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    background: rgba(10, 15, 30, 0.75);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 10;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.stat-box {
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+.yellow { color: #ffd700; text-shadow: 0 0 5px rgba(255,215,0,0.5); }
+.red { color: #ff4d4d; text-shadow: 0 0 5px rgba(255,77,77,0.5); }
+.green { color: #4dff4d; text-shadow: 0 0 5px rgba(77,255,77,0.5); }
+.cyan { color: #4da6ff; text-shadow: 0 0 5px rgba(77,166,255,0.5); }
 
+/* Game Canvas */
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Control Panels */
+#control-panel {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background: rgba(10, 15, 30, 0.85);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    z-index: 10;
+    overflow-x: auto;
+}
+.panel-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 160px;
+}
+.panel-section h3 {
+    margin: 0 0 5px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #aab;
+}
+button {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffd700;
+    box-shadow: 0 0 8px rgba(255,215,0,0.2);
+}
+button:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.skin-default { border-left: 4px solid #ffd700; }
+.skin-fire { border-left: 4px solid #ff4500; }
+.skin-water { border-left: 4px solid #1e90ff; }
+.skin-supernova { border-left: 4px solid #9370db; }
+
+.active-skin {
+    background: #ffd700 !important;
+    color: black !important;
+    box-shadow: 0 0 10px rgba(255,215,0,0.4);
+}
+
+#wave-btn {
+    background: #198754;
+    border-color: #198754;
+    font-size: 16px;
+    height: 100%;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* SECRET ADMIN PANEL */
+#admin-panel {
+    position: absolute;
+    top: 85px;
+    right: 10px;
+    background: rgba(15, 5, 30, 0.95);
+    border: 2px solid #ff00ff;
+    box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+    border-radius: 8px;
+    padding: 15px;
+    width: 280px;
+    z-index: 100;
+    display: none;
+    backdrop-filter: blur(5px);
+}
+#admin-panel h2 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    color: #ff00ff;
+    text-shadow: 0 0 5px rgba(255,0,255,0.4);
+    text-align: center;
+    letter-spacing: 1px;
+}
+.admin-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.admin-row span {
+    font-size: 13px;
+    font-weight: bold;
+}
+.toggle-btn {
+    background: #441144;
+    border: 1px solid #ff00ff;
+    padding: 5px 10px;
+    font-size: 11px;
+}
+.toggle-btn.active {
+    background: #ff00ff;
+    color: black;
+    box-shadow: 0 0 8px #ff00ff;
+}
+
+/* Instructions Overlay */
+#instructions {
+    position: absolute;
+    top: 85px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(3px);
+    font-size: 13px;
+    pointer-events: none;
+    line-height: 1.5;
+    color: #eee;
+    z-index: 5;
+}
+
+/* Weapon Select Layout styling */
+#weapon-select {
+    background: rgba(20, 30, 50, 0.85);
+    color: #fff;
+    border: 1px solid #4da6ff;
+    font-size: 12px;
+    padding: 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+@media(max-width: 768px) {
+    #instructions { display: none; }
+    #control-panel { flex-direction: column; max-height: 220px; overflow-y: auto; }
+    .stat-box { font-size: 13px; }
+}
